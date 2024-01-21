@@ -4,6 +4,12 @@ from flask_mqtt import Mqtt
 import uuid
 import os
 
+import cv2
+import pytesseract
+import fitz
+
+pytesseract.pytesseract.tesseract_cmd = 'Tesseract-ocr\\tesseract.exe'
+
 try:
     os.mkdir("files")
     os.mkdir("files/pdf")
@@ -47,8 +53,17 @@ def upload_pdf():
     file = request.files['file']
     path = './files/pdf/{}.pdf'.format(uuid.uuid4())
     file.save(path)
-
-    return 'PDF file uploaded successfully'
+    
+    pdf_document = fitz.open(path)
+    num_pages = pdf_document.page_count
+    text=''
+    for page_num in range(num_pages):
+        page = pdf_document.load_page(page_num)
+        text += page.get_text()
+        
+    os.remove(path)
+    
+    return text
 
 
 @app.route('/img', methods=['POST'])
@@ -56,8 +71,13 @@ def upload_image():
     file = request.files['file']
     path = './files/img/{}.jpg'.format(uuid.uuid4())
     file.save(path)
-
-    return 'Image file uploaded successfully'
+    
+    img = cv2.imread(path, cv2.IMREAD_COLOR)
+    text = pytesseract.image_to_string(img, lang='tam')
+    
+    os.remove(path)
+    
+    return text
 
 
 @app.route('/display', methods=['POST'])
