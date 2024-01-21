@@ -1,0 +1,78 @@
+from flask import Flask, request, jsonify
+from flask_mqtt import Mqtt
+
+import uuid
+import os
+
+try:
+    os.mkdir("files")
+    os.mkdir("files/pdf")
+    os.mkdir("files/img")
+except:
+    pass
+
+app = Flask(__name__)
+
+app.config['MQTT_BROKER_URL'] = '127.0.0.1'
+app.config['MQTT_BROKER_PORT'] = 1883
+app.config['MQTT_USERNAME'] = 'TheAPIServer'
+# app.config['MQTT_PASSWORD'] = ''
+app.config['MQTT_KEEPALIVE'] = 5
+app.config['MQTT_TLS_ENABLED'] = False
+
+app.config['MQTT_TOPIC'] = 'braille'
+
+mqtt_client = Mqtt(app)
+
+
+@mqtt_client.on_connect()
+def handle_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print('Connected successfully')
+        mqtt_client.subscribe(app.config['MQTT_TOPIC'])
+    else:
+        print('Bad connection. Code:', rc)
+
+@mqtt_client.on_message()
+def handle_mqtt_message(client, userdata, message):
+    data = dict(
+        topic=message.topic,
+        payload=message.payload.decode()
+    )
+    print('Received message on topic: {topic} with payload: {payload}'.format(**data))
+
+
+@app.route('/pdf', methods=['POST'])
+def upload_pdf():
+    file = request.files['file']
+    path = './files/pdf/{}.pdf'.format(uuid.uuid4())
+    file.save(path)
+
+    return 'PDF file uploaded successfully'
+
+
+@app.route('/img', methods=['POST'])
+def upload_image():
+    file = request.files['file']
+    path = './files/img/{}.jpg'.format(uuid.uuid4())
+    file.save(path)
+
+    return 'Image file uploaded successfully'
+
+
+@app.route('/display', methods=['POST'])
+def display_data():
+    data = request.data
+    print(data)
+
+
+    return 'Data printed successfully'
+
+@app.route('/ping_mqtt', methods=['GET'])
+def ping_mqtt():
+    mqtt_client.publish(app.config['MQTT_TOPIC'], 0xFF)
+    return 'Pinded successfully'
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
