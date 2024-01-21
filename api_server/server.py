@@ -60,7 +60,9 @@ def upload_pdf():
     for page_num in range(num_pages):
         page = pdf_document.load_page(page_num)
         text += page.get_text()
-
+        
+    os.remove(path)
+    
     return text
 
 
@@ -72,6 +74,8 @@ def upload_image():
     
     img = cv2.imread(path, cv2.IMREAD_COLOR)
     text = pytesseract.image_to_string(img, lang='tam')
+    
+    os.remove(path)
     
     return text
 
