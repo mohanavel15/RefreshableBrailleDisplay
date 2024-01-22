@@ -7,8 +7,10 @@ import os
 import cv2
 import pytesseract
 import fitz
+import re
 
-pytesseract.pytesseract.tesseract_cmd = 'Tesseract-ocr\\tesseract.exe'
+import braille
+# pytesseract.pytesseract.tesseract_cmd = 'Tesseract-ocr\\tesseract.exe'
 
 try:
     os.mkdir("files")
@@ -84,10 +86,22 @@ def upload_image():
 def display_data():
     data = request.data
     print(data)
-
+    character = data[0]
+    if re.match("^[A-Za-z0-9]$", character):
+        to_translate = braille.englishToBrailleDict.get(character.lower(), "000000")
+        if to_translate.endswith('_'):
+            to_translate = to_translate[:-1]
+        hex_val = hex(int(to_translate, 2))[2:]
+        mqtt_client.publish(app.config['MQTT_TOPIC'], hex_val)
+    else:
+        to_translate = braille.tamilToBrailleDict.get(character, "000000")
+        if to_translate.endswith('_'):
+            to_translate = to_translate[:-1]
+        hex_val = hex(int(to_translate, 2))[2:]
+        mqtt_client.publish(app.config['MQTT_TOPIC'], hex_val)
 
     return 'Data printed successfully'
-
+# 
 @app.route('/ping_mqtt', methods=['GET'])
 def ping_mqtt():
     mqtt_client.publish(app.config['MQTT_TOPIC'], 0xFF)
