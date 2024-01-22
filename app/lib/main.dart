@@ -1,9 +1,6 @@
-import 'dart:io';
-
-import 'package:app/braille.dart';
+import 'package:app/text_to_braille.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-// import 'package:read_pdf_text/read_pdf_text.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,23 +27,24 @@ class MyHomePage extends StatelessWidget {
 
   final String title;
 
-  void pickAPdf(BuildContext context) async {
+  void pickFile(BuildContext context, String type) async {
+    List<String> exts = [];
+    if (type == 'pdf') {
+      exts = ['pdf', 'docx'];
+    } else if (type == 'image') {
+      exts = ['jpg', 'jpeg', 'png'];
+    } else {
+      debugPrint('unknown type');
+    }
+
     FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf', 'docx', 'txt'],
+      allowedExtensions: exts,
     ).then((result) {
       if (result != null) {
-        String path = result.files.single.path!;
+        //String path = result.files.single.path!;
         try {
-          File(path).readAsString().then((text) {
-          //ReadPdfText.getPDFtext(path).then((text) {
-            Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TextTOBraille(text: text),
-            ),
-          );
-          });
+          
         } catch (e) {
           debugPrint(e.toString());
         }
@@ -58,11 +56,41 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text("Text to Braille"),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () => pickAPdf(context),
-          child: const Text("Pick A pdf"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () => pickFile(context, "pdf"),
+                child: const Text('Pick a PDF'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () => pickFile(context, "image"),
+                child: const Text('Pick a Image'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TextToBraille(text: ""),
+                    ),
+                  );
+                },
+                child: const Text('Send a Text'),
+              ),
+            ),
+          ],
         ),
       ),
     );
