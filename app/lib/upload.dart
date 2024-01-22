@@ -1,3 +1,4 @@
+import 'package:app/text_to_braille.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
@@ -16,7 +17,7 @@ class _FileUploadState extends State<FileUpload> {
   String _responseCode = '';
   bool _isUploading = false;
 
-  void _uploadFile() async {
+  void _uploadFile(BuildContext context) async {
     try {
       setState(() {
         _isUploading = true;
@@ -45,8 +46,17 @@ class _FileUploadState extends State<FileUpload> {
         _responseCode = response.statusCode.toString();
         _isUploading = false;
       });
-    } catch (e) {
-      print(e);
+
+      if (!context.mounted) return;
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TextToBraille(text: response.data.toString()),
+        ),
+      );
+    } catch (err) {
+      debugPrint(err.toString());
       setState(() {
         _isUploading = false;
       });
@@ -69,7 +79,7 @@ class _FileUploadState extends State<FileUpload> {
               CircularProgressIndicator(value: _uploadProgress)
             else
               ElevatedButton(
-                onPressed: _uploadFile,
+                onPressed: () => _uploadFile(context),
                 child: const Text('Upload'),
               ),
             const SizedBox(height: 16),

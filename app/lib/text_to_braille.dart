@@ -12,20 +12,17 @@ class TextToBraille extends StatefulWidget {
 
 class _TextToBrailleState extends State<TextToBraille> {
   final TextEditingController _textController = TextEditingController();
-  final TextEditingController _inputController = TextEditingController();
   int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _textController.text = widget.text;
-    _inputController.text = "$_currentIndex";
   }
 
   @override
   void dispose() {
     _textController.dispose();
-    _inputController.dispose();
     super.dispose();
   }
 
@@ -33,29 +30,40 @@ class _TextToBrailleState extends State<TextToBraille> {
     String text = _textController.text;
     if (_currentIndex >= 0 && _currentIndex < text.length) {
       String character = text[_currentIndex];
-      String url = 'http://192.168.144.142:5000/display';
-      try {
-        Response response =
-            await Dio().post(url, data: character);
-        debugPrint(response.data);
-      } catch (e) {
-        debugPrint('Error: $e');
-      }
+      doPost(character);
+    }
+  }
+
+  void doPost(String character) async {
+    String url = 'http://192.168.144.142:5000/display';
+    try {
+      Response response = await Dio().post(url, data: character);
+      debugPrint(response.data);
+    } catch (e) {
+      debugPrint('Error: $e');
     }
   }
 
   void _decrementIndex() {
     setState(() {
-      _currentIndex = (_currentIndex - 1).clamp(0, _textController.text.isNotEmpty ? _textController.text.length - 1 : 0);
-      _inputController.text = "$_currentIndex";
+      _currentIndex = (_currentIndex - 1).clamp(
+          0,
+          _textController.text.isNotEmpty
+              ? _textController.text.length - 1
+              : 0);
     });
+    _postCharacter();
   }
 
   void _incrementIndex() {
     setState(() {
-      _currentIndex = (_currentIndex + 1).clamp(0, _textController.text.isNotEmpty ? _textController.text.length - 1 : 0);
-      _inputController.text = "$_currentIndex";
+      _currentIndex = (_currentIndex + 1).clamp(
+          0,
+          _textController.text.isNotEmpty
+              ? _textController.text.length - 1
+              : 0);
     });
+    _postCharacter();
   }
 
   @override
@@ -66,14 +74,35 @@ class _TextToBrailleState extends State<TextToBraille> {
       ),
       body: Column(
         children: [
-          TextField(
-            controller: _textController,
-            maxLines: null,
-            onChanged: (value) {
-              setState(() {
-                _currentIndex = 0;
-              });
-            },
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Container(
+              height: MediaQuery.of(context).size.height / 2,
+              color: Colors.lightGreen.shade100,
+              child: TextField(
+                controller: _textController,
+                maxLines: null,
+                onChanged: (value) {
+                  setState(() {
+                    _currentIndex = 0;
+                  });
+                },
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  contentPadding: const EdgeInsets.all(5.0),
+                  isDense: true,
+                  filled: true,
+                  fillColor: Colors.lightGreen.shade100,
+                ),
+                textAlignVertical: TextAlignVertical.top,
+                scrollPhysics: const BouncingScrollPhysics(),
+                keyboardType: TextInputType.multiline,
+              ),
+            ),
           ),
           Row(
             children: [
@@ -95,22 +124,8 @@ class _TextToBrailleState extends State<TextToBraille> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
-                  child: Container(
-                    color: Colors.lightGreen.shade100,
-                    child: TextField(
-                      onChanged: (_) {
-                        _postCharacter();
-                      },
-                      controller: _inputController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                      ),
-                    ),
+                  child: Center(
+                    child: Text("$_currentIndex", style: const TextStyle(fontSize: 20))
                   ),
                 ),
               ),
@@ -127,6 +142,31 @@ class _TextToBrailleState extends State<TextToBraille> {
                     ),
                     child: const Text('Next'),
                   ),
+                ),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Text(
+                  "Current : ${_textController.text.isNotEmpty ? _textController.text[_currentIndex] : 'None'}",
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: ElevatedButton(
+                  onPressed: () => doPost(" "),
+                  style: ElevatedButton.styleFrom(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                    minimumSize:
+                        Size(MediaQuery.of(context).size.width - 5, 50),
+                  ),
+                  child: const Text('Clear'),
                 ),
               ),
             ],
