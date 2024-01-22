@@ -32,23 +32,12 @@ app.config['MQTT_TOPIC'] = 'braille'
 
 mqtt_client = Mqtt(app)
 
-
 @mqtt_client.on_connect()
 def handle_connect(client, userdata, flags, rc):
     if rc == 0:
         print('Connected successfully')
-        mqtt_client.subscribe(app.config['MQTT_TOPIC'])
     else:
         print('Bad connection. Code:', rc)
-
-@mqtt_client.on_message()
-def handle_mqtt_message(client, userdata, message):
-    data = dict(
-        topic=message.topic,
-        payload=message.payload.decode()
-    )
-    print('Received message on topic: {topic} with payload: {payload}'.format(**data))
-
 
 @app.route('/pdf', methods=['POST'])
 def upload_pdf():
@@ -67,7 +56,6 @@ def upload_pdf():
     
     return text
 
-
 @app.route('/img', methods=['POST'])
 def upload_image():
     file = request.files['file']
@@ -81,32 +69,26 @@ def upload_image():
     
     return text
 
-
 @app.route('/display', methods=['POST'])
 def display_data():
-    data = request.data
-    print(data)
+    data = request.data.decode('utf-8')
     character = data[0]
     if re.match("^[A-Za-z0-9]$", character):
         to_translate = braille.englishToBrailleDict.get(character.lower(), "000000")
         if to_translate.endswith('_'):
             to_translate = to_translate[:-1]
-        hex_val = hex(int(to_translate, 2))[2:]
-        mqtt_client.publish(app.config['MQTT_TOPIC'], hex_val)
+        
+        val = int(to_translate, 2)
+        mqtt_client.publish(app.config['MQTT_TOPIC'], val.to_bytes(1, 'little', signed=False))
     else:
         to_translate = braille.tamilToBrailleDict.get(character, "000000")
         if to_translate.endswith('_'):
             to_translate = to_translate[:-1]
-        hex_val = hex(int(to_translate, 2))[2:]
-        mqtt_client.publish(app.config['MQTT_TOPIC'], hex_val)
+        
+        val = int(to_translate, 2)
+        mqtt_client.publish(app.config['MQTT_TOPIC'], val.to_bytes(1, 'little', signed=False))
 
-    return 'Data printed successfully'
-# 
-@app.route('/ping_mqtt', methods=['GET'])
-def ping_mqtt():
-    mqtt_client.publish(app.config['MQTT_TOPIC'], 0xFF)
-    return 'Pinded successfully'
-
+    return 'OK'
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=True)
