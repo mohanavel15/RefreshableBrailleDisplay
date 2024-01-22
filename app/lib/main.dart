@@ -1,4 +1,5 @@
 import 'package:app/text_to_braille.dart';
+import 'package:app/upload.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -42,9 +43,14 @@ class MyHomePage extends StatelessWidget {
       allowedExtensions: exts,
     ).then((result) {
       if (result != null) {
-        //String path = result.files.single.path!;
+        String path = result.files.single.path!;
         try {
-          
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FileUpload(filePath: path, fileType: type),
+            ),
+          );
         } catch (e) {
           debugPrint(e.toString());
         }

@@ -33,10 +33,10 @@ class _TextToBrailleState extends State<TextToBraille> {
     String text = _textController.text;
     if (_currentIndex >= 0 && _currentIndex < text.length) {
       String character = text[_currentIndex];
-      String url = 'http://127.0.0.1:5000/display';
+      String url = 'http://192.168.144.142:5000/display';
       try {
         Response response =
-            await Dio().post(url, data: {'character': character});
+            await Dio().post(url, data: character);
         debugPrint(response.data);
       } catch (e) {
         debugPrint('Error: $e');
