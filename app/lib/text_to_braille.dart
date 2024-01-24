@@ -158,6 +158,20 @@ class _TextToBrailleState extends State<TextToBraille> {
               Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: ElevatedButton(
+                  onPressed: () => _postCharacter(),
+                  style: ElevatedButton.styleFrom(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                    minimumSize:
+                        Size(MediaQuery.of(context).size.width - 5, 50),
+                  ),
+                  child: const Text('Post'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: ElevatedButton(
                   onPressed: () => doPost(" "),
                   style: ElevatedButton.styleFrom(
                     shape: const RoundedRectangleBorder(
