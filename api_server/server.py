@@ -6,6 +6,7 @@ import os
 
 import cv2
 import pytesseract
+from docx import Document
 import fitz
 import re
 
@@ -56,6 +57,21 @@ def upload_pdf():
     
     return text
 
+@app.route('/word', methods=['POST'])
+def upload_word():
+    file = request.files['file']
+    path = './files/word/{}.docx'.format(uuid.uuid4())
+    file.save(path)
+    doc = Document(path)
+    text=''
+    Paras=doc.paragraphs
+    for paragraph in Paras:
+        text += paragraph.text
+        
+    os.remove(path)
+    
+    return text
+
 @app.route('/img', methods=['POST'])
 def upload_image():
     file = request.files['file']
@@ -89,6 +105,18 @@ def display_data():
         mqtt_client.publish(app.config['MQTT_TOPIC'], val.to_bytes(1, 'little', signed=False))
 
     return 'OK'
+
+@app.route('/translate', methods=['POST'])
+def translate_paragraph():
+    data = request.data.decode('utf-8') #this is the paragraphs of text. 
+    character = data[0]
+    if re.match("^[A-Za-z]$", character):
+        tosend = braille.para_to_braille(data,braille.englishToBrailleDict)
+    else:
+        tosend = braille.para_to_braille(data,braille.tamilToBrailleDict)
+    
+    return tosend
+    
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)
