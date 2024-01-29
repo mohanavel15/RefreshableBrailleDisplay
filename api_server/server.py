@@ -60,7 +60,7 @@ def upload_pdf():
 @app.route('/word', methods=['POST'])
 def upload_word():
     file = request.files['file']
-    path = './files/pdf/{}.pdf'.format(uuid.uuid4())
+    path = './files/word/{}.docx'.format(uuid.uuid4())
     file.save(path)
     doc = Document(path)
     text=''
@@ -114,7 +114,8 @@ def translate_paragraph():
         tosend = braille.para_to_braille(data,braille.englishToBrailleDict)
     else:
         tosend = braille.para_to_braille(data,braille.tamilToBrailleDict)
-    mqtt_client.publish(app.config['MQTT_TOPIC'], tosend)
+    
+    return tosend
     
 
 if __name__ == '__main__':
