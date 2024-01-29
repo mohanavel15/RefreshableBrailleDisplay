@@ -127,12 +127,8 @@ def para_to_braille(para,refDict):
             char = refDict[c.lower()]
             if char[-1] == "_":
                 char=char[:-1]
-            bchar = [i+1 for i, x in enumerate(char) if x == '1']
-            dot_values = {1: 0x1, 2: 0x2, 3: 0x4, 4: 0x8, 5: 0x10, 6: 0x20, 7: 0x40, 8: 0x80}
-            sum = 0x0
-            for dot in bchar:
-                sum = sum + dot_values[dot]
-            toadd = chr(int(hex(10240+sum), 16))
+            val = int(char[::-1], 2)
+            toadd = chr(int(hex(10240+val), 16))
         else:
             toadd = c
         output_string = output_string+toadd
