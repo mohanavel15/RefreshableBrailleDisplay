@@ -1,4 +1,5 @@
 import 'package:app/text_to_braille.dart';
+import 'package:app/translator.dart';
 import 'package:app/upload.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -94,6 +95,20 @@ class MyHomePage extends StatelessWidget {
                   );
                 },
                 child: const Text('Send a Text'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Translator(text: ""),
+                    ),
+                  );
+                },
+                child: const Text('Translate a Text'),
               ),
             ),
           ],

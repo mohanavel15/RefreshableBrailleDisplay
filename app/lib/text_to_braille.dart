@@ -1,3 +1,4 @@
+import 'package:app/translator.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
@@ -125,8 +126,8 @@ class _TextToBrailleState extends State<TextToBraille> {
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Center(
-                    child: Text("$_currentIndex", style: const TextStyle(fontSize: 20))
-                  ),
+                      child: Text("$_currentIndex",
+                          style: const TextStyle(fontSize: 20))),
                 ),
               ),
               Expanded(
@@ -146,44 +147,59 @@ class _TextToBrailleState extends State<TextToBraille> {
               ),
             ],
           ),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Text(
-                  "Current : ${_textController.text.isNotEmpty ? _textController.text[_currentIndex] : 'None'}",
-                  style: const TextStyle(fontSize: 20),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Text(
+              "Current : ${_textController.text.isNotEmpty ? _textController.text[_currentIndex] : 'None'}",
+              style: const TextStyle(fontSize: 20),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: ElevatedButton(
+              onPressed: () => _postCharacter(),
+              style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
                 ),
+                minimumSize: Size(MediaQuery.of(context).size.width - 5, 50),
               ),
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: ElevatedButton(
-                  onPressed: () => _postCharacter(),
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                    minimumSize:
-                        Size(MediaQuery.of(context).size.width - 5, 50),
+              child: const Text('Post'),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: ElevatedButton(
+              onPressed: () => doPost(" "),
+              style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+                minimumSize: Size(MediaQuery.of(context).size.width - 5, 50),
+              ),
+              child: const Text('Clear'),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        Translator(text: _textController.text),
                   ),
-                  child: const Text('Post'),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
                 ),
+                minimumSize: Size(MediaQuery.of(context).size.width - 5, 50),
               ),
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: ElevatedButton(
-                  onPressed: () => doPost(" "),
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                    minimumSize:
-                        Size(MediaQuery.of(context).size.width - 5, 50),
-                  ),
-                  child: const Text('Clear'),
-                ),
-              ),
-            ],
+              child: const Text('Translate'),
+            ),
           ),
         ],
       ),
