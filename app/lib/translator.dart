@@ -30,7 +30,8 @@ class _Translator extends State<Translator> {
   void doPost() async {
     String url = 'http://192.168.125.142:5000/translate';
     try {
-      Response response = await Dio().post(url, data: _inputTextController.text);
+      Response response =
+          await Dio().post(url, data: _inputTextController.text);
       _outputTextController.text = response.data;
     } catch (e) {
       debugPrint('Error: $e');
@@ -95,37 +96,32 @@ class _Translator extends State<Translator> {
               ),
             ),
           ),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: ElevatedButton(
-                  onPressed: () => doPost(),
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                    minimumSize:
-                        Size(MediaQuery.of(context).size.width - 5, 50),
-                  ),
-                  child: const Text('Translate'),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: ElevatedButton(
+              onPressed: () => doPost(),
+              style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
                 ),
+                minimumSize: Size(MediaQuery.of(context).size.width - 5, 50),
               ),
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: ElevatedButton(
-                  onPressed: () => Clipboard.setData(ClipboardData(text: _outputTextController.text)),
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                    minimumSize:
-                        Size(MediaQuery.of(context).size.width - 5, 50),
-                  ),
-                  child: const Text('Copy'),
+              child: const Text('Translate'),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: ElevatedButton(
+              onPressed: () => Clipboard.setData(
+                  ClipboardData(text: _outputTextController.text)),
+              style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
                 ),
+                minimumSize: Size(MediaQuery.of(context).size.width - 5, 50),
               ),
-            ],
+              child: const Text('Copy'),
+            ),
           ),
         ],
       ),
