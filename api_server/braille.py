@@ -49,6 +49,9 @@ brailleToEnglishDict = {
 englishToBrailleDict = {value: key for key, value in brailleToEnglishDict.items()}
 
 tamilToBrailleDict = {
+    '=': '011011',
+    '+': '011010_',
+    '-': '010010_',
     ' ': '000000',
     '.': '010011',
     ',': '010000',
@@ -91,7 +94,7 @@ tamilToBrailleDict = {
     'ள': '000111',
     'ற': '110111',
     'ன': '000011',
-    '்': '000100_',
+    '்': '000011_',
     'ா': '001110_',
     'ி': '010100_',
     'ீ': '001010_',
@@ -102,7 +105,31 @@ tamilToBrailleDict = {
     'ை': '001100_',
     'ொ': '101101_',
     'ோ': '101010_',
-    'ௌ': '010101_'
+    'ௌ': '010101_',
+    '1' : '100000_',
+    '2' : '110000_',
+    '3' : '100100_',
+    '4' : '100110_',
+    '5' : '100010_',
+    '6' : '110100_',
+    '7' : '110110_',
+    '8' : '110010_',
+    '9' : '101100_',
+    '0' : '010110_',
 }
 
 brailleToTamilDict = {value: key for key, value in tamilToBrailleDict.items()}
+
+def para_to_braille(para,refDict):
+    output_string = ''
+    for c in para:
+        if c in refDict:
+            char = refDict[c.lower()]
+            if char[-1] == "_":
+                char=char[:-1]
+            val = int(char[::-1], 2)
+            toadd = chr(int(hex(10240+val), 16))
+        else:
+            toadd = c
+        output_string = output_string+toadd
+    return output_string
