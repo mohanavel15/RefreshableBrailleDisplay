@@ -1,3 +1,4 @@
+import 'package:app/translator.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
@@ -125,8 +126,8 @@ class _TextToBrailleState extends State<TextToBraille> {
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Center(
-                    child: Text("$_currentIndex", style: const TextStyle(fontSize: 20))
-                  ),
+                      child: Text("$_currentIndex",
+                          style: const TextStyle(fontSize: 20))),
                 ),
               ),
               Expanded(
@@ -181,6 +182,28 @@ class _TextToBrailleState extends State<TextToBraille> {
                         Size(MediaQuery.of(context).size.width - 5, 50),
                   ),
                   child: const Text('Clear'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            Translator(text: _textController.text),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                    minimumSize:
+                        Size(MediaQuery.of(context).size.width - 5, 50),
+                  ),
+                  child: const Text('Translate'),
                 ),
               ),
             ],
