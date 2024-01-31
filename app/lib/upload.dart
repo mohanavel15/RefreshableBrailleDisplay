@@ -1,3 +1,4 @@
+import 'package:app/server.dart';
 import 'package:app/text_to_braille.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -28,12 +29,12 @@ class _FileUploadState extends State<FileUpload> {
       });
 
       Dio dio = Dio();
-      dio.options.baseUrl = 'http://192.168.144.142:5000';
+      dio.options.baseUrl = serverUrl;
       dio.options.connectTimeout = const Duration(seconds: 5);
 
       dio.interceptors.add(LogInterceptor());
 
-      Response response = await dio.post(widget.fileType == 'pdf' ? '/pdf' : '/img',
+      Response response = await dio.post(widget.fileType == 'docx' ? '/docx' : '/img',
         data: formData,
         onSendProgress: (int sent, int total) {
           setState(() {
