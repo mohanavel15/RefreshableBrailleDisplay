@@ -31,8 +31,8 @@ class MyHomePage extends StatelessWidget {
 
   void pickFile(BuildContext context, String type) async {
     List<String> exts = [];
-    if (type == 'pdf') {
-      exts = ['pdf', 'docx'];
+    if (type == 'docx') {
+      exts = ['docx'];
     } else if (type == 'image') {
       exts = ['jpg', 'jpeg', 'png'];
     } else {
@@ -72,8 +72,8 @@ class MyHomePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                onPressed: () => pickFile(context, "pdf"),
-                child: const Text('Pick a PDF'),
+                onPressed: () => pickFile(context, "docx"),
+                child: const Text('Pick a Document'),
               ),
             ),
             Padding(
