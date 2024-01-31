@@ -2,6 +2,7 @@ import 'package:app/server.dart';
 import 'package:app/translator.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class TextToBraille extends StatefulWidget {
   final String text;
@@ -14,12 +15,26 @@ class TextToBraille extends StatefulWidget {
 
 class _TextToBrailleState extends State<TextToBraille> {
   final TextEditingController _textController = TextEditingController();
+  final FlutterTts flutterTts = FlutterTts();
+  bool _isPlaying = false;
+
   int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _textController.text = widget.text;
+    flutterTts.setLanguage("ta-IN");
+    flutterTts.setSpeechRate(0.5);
+    setState(() {
+      _isPlaying = false;
+    });
+
+    flutterTts.setCompletionHandler(() {
+      setState(() {
+        _isPlaying = false;
+      });
+    });
   }
 
   @override
@@ -78,7 +93,7 @@ class _TextToBrailleState extends State<TextToBraille> {
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: Container(
-              height: MediaQuery.of(context).size.height / 2,
+              height: MediaQuery.of(context).size.height / 3,
               color: Colors.lightGreen.shade100,
               child: TextField(
                 controller: _textController,
@@ -178,6 +193,41 @@ class _TextToBrailleState extends State<TextToBraille> {
                 minimumSize: Size(MediaQuery.of(context).size.width - 5, 50),
               ),
               child: const Text('Clear'),
+            ),
+          ),
+          !_isPlaying ? Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: ElevatedButton(
+              onPressed: () async{
+                await flutterTts.speak(_textController.text);
+                setState(() {
+                  _isPlaying = true;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+                minimumSize: Size(MediaQuery.of(context).size.width - 5, 50),
+              ),
+              child: const Text('Speak'),
+            ),
+          ) : Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                await flutterTts.stop();
+                setState(() {
+                  _isPlaying = false;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+                minimumSize: Size(MediaQuery.of(context).size.width - 5, 50),
+              ),
+              child: const Text('Stop'),
             ),
           ),
           Padding(
