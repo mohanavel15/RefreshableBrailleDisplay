@@ -17,6 +17,7 @@ try:
     os.mkdir("files")
     os.mkdir("files/pdf")
     os.mkdir("files/img")
+    os.mkdir("files/docx")
 except:
     pass
 
@@ -57,10 +58,10 @@ def upload_pdf():
     
     return text
 
-@app.route('/word', methods=['POST'])
-def upload_word():
+@app.route('/docx', methods=['POST'])
+def upload_docx():
     file = request.files['file']
-    path = './files/word/{}.docx'.format(uuid.uuid4())
+    path = './files/docx/{}.docx'.format(uuid.uuid4())
     file.save(path)
     doc = Document(path)
     text=''
