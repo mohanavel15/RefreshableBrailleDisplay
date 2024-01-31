@@ -1,3 +1,4 @@
+import 'package:app/server.dart';
 import 'package:app/translator.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -36,9 +37,8 @@ class _TextToBrailleState extends State<TextToBraille> {
   }
 
   void doPost(String character) async {
-    String url = 'http://192.168.144.142:5000/display';
     try {
-      Response response = await Dio().post(url, data: character);
+      Response response = await Dio().post(displayUrl, data: character);
       debugPrint(response.data);
     } catch (e) {
       debugPrint('Error: $e');

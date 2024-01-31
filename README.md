@@ -16,7 +16,7 @@ Conda Environment
 ```
 $ conda env create -f environment.yml
 ```
-exxport:
+export:
 ```
 $ conda env export | grep -v "^prefix: " > environment.yml
 ```

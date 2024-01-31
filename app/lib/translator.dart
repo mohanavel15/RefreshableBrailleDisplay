@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:app/server.dart';
 
 class Translator extends StatefulWidget {
   final String text;
@@ -28,10 +29,9 @@ class _Translator extends State<Translator> {
   }
 
   void doPost() async {
-    String url = 'http://192.168.125.142:5000/translate';
     try {
       Response response =
-          await Dio().post(url, data: _inputTextController.text);
+          await Dio().post(translateUrl, data: _inputTextController.text);
       _outputTextController.text = response.data;
     } catch (e) {
       debugPrint('Error: $e');
