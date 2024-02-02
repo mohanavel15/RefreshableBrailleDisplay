@@ -52,6 +52,7 @@ class _TextToBrailleState extends State<TextToBraille> {
   }
 
   void doPost(String character) async {
+    String displayUrl = await getDisplayUrl();
     try {
       Response response = await Dio().post(displayUrl, data: character);
       debugPrint(response.data);

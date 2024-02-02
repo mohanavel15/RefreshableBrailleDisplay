@@ -1,3 +1,4 @@
+import 'package:app/server.dart';
 import 'package:app/text_to_braille.dart';
 import 'package:app/translator.dart';
 import 'package:app/upload.dart';
@@ -39,10 +40,12 @@ class MyHomePage extends StatelessWidget {
       debugPrint('unknown type');
     }
 
-    FilePicker.platform.pickFiles(
+    FilePicker.platform
+        .pickFiles(
       type: FileType.custom,
       allowedExtensions: exts,
-    ).then((result) {
+    )
+        .then((result) {
       if (result != null) {
         String path = result.files.single.path!;
         try {
@@ -64,6 +67,47 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Text to Braille"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.build, color: Colors.grey),
+            onPressed: () async {
+              final formKey = GlobalKey<FormState>();
+              final controller = TextEditingController();
+              getServerUrl().then((value) => controller.text = value);
+              
+              await showDialog<void>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        content: Form(
+                            key: formKey,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                TextFormField(
+                                  controller: controller,
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Enter URL',
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    if (formKey.currentState!.validate()) {
+                                      saveToFile(controller.text).then((value) {
+                                        Navigator.of(context).pop();
+                                      });
+                                    }
+                                  },
+                                  child: const Text('Save'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(

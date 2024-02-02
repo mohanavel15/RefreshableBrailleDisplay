@@ -29,6 +29,7 @@ class _Translator extends State<Translator> {
   }
 
   void doPost() async {
+    String translateUrl = await getTranslateUrl();
     try {
       Response response =
           await Dio().post(translateUrl, data: _inputTextController.text);
