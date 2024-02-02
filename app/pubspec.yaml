@@ -68,6 +68,7 @@ flutter:
   assets:
     - assets/tessdata_config.json
     - assets/tessdata/tam.traineddata
+    - assets/tessdata/eng.traineddata
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
