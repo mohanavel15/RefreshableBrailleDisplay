@@ -29,7 +29,7 @@ class _FileUploadState extends State<FileUpload> {
       });
 
       Dio dio = Dio();
-      dio.options.baseUrl = serverUrl;
+      dio.options.baseUrl = await getServerUrl();
       dio.options.connectTimeout = const Duration(seconds: 5);
 
       dio.interceptors.add(LogInterceptor());
