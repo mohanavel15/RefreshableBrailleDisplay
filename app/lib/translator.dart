@@ -1,7 +1,6 @@
+import 'package:app/braille.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
-import 'package:app/server.dart';
 
 class Translator extends StatefulWidget {
   final String text;
@@ -26,17 +25,6 @@ class _Translator extends State<Translator> {
   void dispose() {
     _inputTextController.dispose();
     super.dispose();
-  }
-
-  void doPost() async {
-    String translateUrl = await getTranslateUrl();
-    try {
-      Response response =
-          await Dio().post(translateUrl, data: _inputTextController.text);
-      _outputTextController.text = response.data;
-    } catch (e) {
-      debugPrint('Error: $e');
-    }
   }
 
   @override
@@ -100,7 +88,9 @@ class _Translator extends State<Translator> {
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: ElevatedButton(
-              onPressed: () => doPost(),
+              onPressed: () {
+                _outputTextController.text = tamilToBraille(_inputTextController.text);
+              },
               style: ElevatedButton.styleFrom(
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.zero,
