@@ -32,7 +32,7 @@ class _Translator extends State<Translator> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Text To Braille"),
+        title: const Text("Translate To Braille"),
       ),
       body: Column(
         children: [

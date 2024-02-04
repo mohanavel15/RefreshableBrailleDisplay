@@ -87,7 +87,7 @@ class _TextToBrailleState extends State<TextToBraille> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Text To Braille"),
+        title: const Text("Display Braille"),
       ),
       body: Column(
         children: [
