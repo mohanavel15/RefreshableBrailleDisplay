@@ -6,6 +6,7 @@ import 'package:app/translator.dart';
 import 'package:docx_to_text/docx_to_text.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 
 void main() {
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: ''),
+      builder: EasyLoading.init(),
     );
   }
 }
@@ -34,6 +36,8 @@ class MyHomePage extends StatelessWidget {
   final String title;
 
   void readDocx(BuildContext context) async {
+    EasyLoading.show(status: 'loading...');
+
     List<String> exts = ['docx'];
     var result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -47,6 +51,7 @@ class MyHomePage extends StatelessWidget {
         final bytes = await file.readAsBytes();
         final text = docxToText(bytes);
 
+        EasyLoading.dismiss();
         if (!context.mounted) return;
         Navigator.push(
           context,
@@ -61,6 +66,7 @@ class MyHomePage extends StatelessWidget {
   }
 
   void readImage(BuildContext context) async {
+    EasyLoading.show(status: 'loading...');
     List<String> exts = ['jpg', 'jpeg', 'png'];
     var result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -72,6 +78,7 @@ class MyHomePage extends StatelessWidget {
       try {
         String text = await FlutterTesseractOcr.extractText(path, language: 'tam+eng');
 
+        EasyLoading.dismiss();
         if (!context.mounted) return;
         Navigator.push(
           context,
