@@ -51,7 +51,7 @@ class MyHomePage extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => TextToBraille(text: text),
+            builder: (context) => Translator(text: text),
           ),
         );
       } catch (e) {
@@ -76,7 +76,7 @@ class MyHomePage extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => TextToBraille(text: text),
+            builder: (context) => Translator(text: text),
           ),
         );
       } catch (e) {
@@ -89,7 +89,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Text to Braille"),
+        title: Text(title),
         actions: [
           IconButton(
             icon: const Icon(Icons.build, color: Colors.grey),
@@ -161,7 +161,7 @@ class MyHomePage extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text('Send a Text'),
+                child: const Text('Display Braille'),
               ),
             ),
             Padding(
