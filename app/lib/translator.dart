@@ -1,5 +1,5 @@
-import 'package:app/braille.dart';
-import 'package:app/text_to_braille.dart';
+import 'package:min_paarvai/braille.dart';
+import 'package:min_paarvai/text_to_braille.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

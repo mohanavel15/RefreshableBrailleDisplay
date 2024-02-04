@@ -1,5 +1,5 @@
-import 'package:app/server.dart';
-import 'package:app/translator.dart';
+import 'package:min_paarvai/server.dart';
+import 'package:min_paarvai/translator.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_tts/flutter_tts.dart';

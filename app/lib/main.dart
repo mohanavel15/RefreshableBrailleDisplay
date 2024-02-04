@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:app/server.dart';
-import 'package:app/text_to_braille.dart';
-import 'package:app/translator.dart';
+import 'package:min_paarvai/server.dart';
+import 'package:min_paarvai/text_to_braille.dart';
+import 'package:min_paarvai/translator.dart';
 import 'package:docx_to_text/docx_to_text.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +60,8 @@ class MyHomePage extends StatelessWidget {
           ),
         );
       } catch (e) {
+        EasyLoading.dismiss();
+        EasyLoading.showToast("Unable to read text from the document");
         debugPrint(e.toString());
       }
     }
@@ -87,6 +89,8 @@ class MyHomePage extends StatelessWidget {
           ),
         );
       } catch (e) {
+        EasyLoading.dismiss();
+        EasyLoading.showToast("Unable to read text from the image");
         debugPrint(e.toString());
       }
     }
