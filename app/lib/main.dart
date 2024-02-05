@@ -64,6 +64,8 @@ class MyHomePage extends StatelessWidget {
         EasyLoading.showToast("Unable to read text from the document");
         debugPrint(e.toString());
       }
+    } else {
+      EasyLoading.dismiss();
     }
   }
 
@@ -93,6 +95,8 @@ class MyHomePage extends StatelessWidget {
         EasyLoading.showToast("Unable to read text from the image");
         debugPrint(e.toString());
       }
+    } else {
+      EasyLoading.dismiss();
     }
   }
 
