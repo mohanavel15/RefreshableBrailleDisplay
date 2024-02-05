@@ -1,5 +1,5 @@
-import 'package:app/braille.dart';
-import 'package:app/text_to_braille.dart';
+import 'package:min_paarvai/braille.dart';
+import 'package:min_paarvai/text_to_braille.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -32,7 +32,7 @@ class _Translator extends State<Translator> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Text To Braille"),
+        title: const Text("Translate To Braille"),
       ),
       body: Column(
         children: [

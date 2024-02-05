@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:app/server.dart';
-import 'package:app/text_to_braille.dart';
-import 'package:app/translator.dart';
+import 'package:min_paarvai/server.dart';
+import 'package:min_paarvai/text_to_braille.dart';
+import 'package:min_paarvai/translator.dart';
 import 'package:docx_to_text/docx_to_text.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +19,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '',
+      title: 'MinPaarvai',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green.shade300),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: ''),
+      home: const MyHomePage(title: 'MinPaarvai'),
       builder: EasyLoading.init(),
     );
   }
@@ -60,8 +60,12 @@ class MyHomePage extends StatelessWidget {
           ),
         );
       } catch (e) {
+        EasyLoading.dismiss();
+        EasyLoading.showToast("Unable to read text from the document");
         debugPrint(e.toString());
       }
+    } else {
+      EasyLoading.dismiss();
     }
   }
 
@@ -87,8 +91,12 @@ class MyHomePage extends StatelessWidget {
           ),
         );
       } catch (e) {
+        EasyLoading.dismiss();
+        EasyLoading.showToast("Unable to read text from the image");
         debugPrint(e.toString());
       }
+    } else {
+      EasyLoading.dismiss();
     }
   }
 
