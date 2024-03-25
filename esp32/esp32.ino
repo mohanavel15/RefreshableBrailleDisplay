@@ -19,10 +19,10 @@ const gpio_num_t PIN5R = GPIO_NUM_5;
 const gpio_num_t PIN6 = GPIO_NUM_23;
 const gpio_num_t PIN6R = GPIO_NUM_22;
 
-const char* WLAN_SSID = "E";
-const char* WLAN_PASS = "Mohanavel@12345";
+const char* WLAN_SSID = "<username>";
+const char* WLAN_PASS = "<password>";
 
-const char* MQTT_SERVER = "192.168.144.142";
+const char* MQTT_SERVER = "192.168.x.x";
 const int MQTT_PORT = 1883;
 const char* MQTT_CLIENT = "esp_client";
 const char* MQTT_TOPIC = "braille";

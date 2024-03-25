@@ -17,11 +17,6 @@ Future<void> saveToFile(String content) async {
   await ipFile.writeAsString(content);
 }
 
-Future<String> getTranslateUrl() async {
-  var serverUrl = await getServerUrl();
-  return "$serverUrl/translate";
-}
-
 Future<String> getDisplayUrl() async {
   var serverUrl = await getServerUrl();
   return "$serverUrl/display";

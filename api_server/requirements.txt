@@ -1,7 +1,2 @@
 flask
 flask-mqtt
-opencv-python
-pymupdf
-pytesseract
-python-docx
-uuid
