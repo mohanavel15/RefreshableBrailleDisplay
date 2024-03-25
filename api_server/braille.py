@@ -1,4 +1,3 @@
-
 brailleToEnglishDict = {
  '100000': 'a',
  '110000': 'b',
