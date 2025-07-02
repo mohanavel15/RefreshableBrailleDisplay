@@ -4,6 +4,9 @@
 Simple flow diagram:
 ![flow](images/flow.png)
 
+![TopDownView](videos/TopDownView.mp4)
+![BrailleCell](videos/BrailleCell.mp4)
+
 # The mobile app
 Flutter based application and responsible for the followings:
 - Image to text ocr using tesseract.
